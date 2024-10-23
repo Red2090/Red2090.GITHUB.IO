@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './styles.css';  // 导入全局样式
+import Navbar from './components/navbar';
+import Content from './components/content';
+import Footer from './components/footer';
+import ToolsPage from './components/toolspage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="app">
+        {/* 导航栏 */}
+        <Navbar />
+
+        {/* 内容区域 */}
+        <Routes>
+          <Route path="/" element={<Content />} />
+          <Route path="/tools" element={<ToolsPage />} />
+        </Routes>
+
+        {/* 页脚 */}
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
