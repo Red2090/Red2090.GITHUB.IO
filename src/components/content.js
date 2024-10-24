@@ -22,7 +22,7 @@ const Content = () => {
     <div className="content">
       <img src="/tools_image.jpg" alt="Tools Image" className="content-image" />
       <Link to="/tools" rel="noopener noreferrer">
-        <button className="rounded-button">Go to Tools</button>
+        <button className="rounded-button">?</button>
       </Link>
     </div>
   );
