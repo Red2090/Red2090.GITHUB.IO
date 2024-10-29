@@ -1,0 +1,126 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #27262b;
+}
+
+nav.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #27262b;
+  color: white;
+  padding: 10px 60px;
+  border-bottom: 1px solid #4a4a4a;
+  font-family: 'Microsoft YaHei', Courier, monospace;
+  font-size: 1.2em;
+  height: 60px;
+}
+
+nav.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+div.content {
+  margin: 20px auto 100px;
+  padding: 20px;
+  background-color: #27262b;
+  border: 1px solid #27262b;
+  color: white;
+  max-width: 1000px;
+  width: 50%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.content-image {
+  width: 100%;
+  border-radius: 22px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.image-container {
+  margin-top: 60px;
+  text-align: center; /* 使图片在容器中居中 */
+}
+
+.image-container img {
+  width: 90%;
+  border-radius: 22px;
+  height: auto;
+}
+
+.content-title h1 {
+  font-size: 2em;
+  font-family: 'MicrosoftYaHei', Courier, monospace;
+  line-height: 0.5em;
+}
+
+a {
+  color: white; /* 链接字体颜色为白色 */
+  text-decoration-line: underline;
+  font-size: 0.9em;
+}
+
+button.rounded-button {
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-bottom: 60px;
+}
+
+button.rounded-button:hover {
+  background-color: #666;
+  transform: scale(1.05);
+}
+
+footer.footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: #27262b;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-top: 1px solid #4a4a4a;
+  justify-content: center;
+  font-family: 'Microsoft YaHei', Courier, monospace;
+  letter-spacing: 1.5px;
+}
+
+div.footer-left {
+  text-align: left;
+  margin-right: 30px;
+  flex: 1;
+  max-width: 300px;
+}
+
+div.footer-right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 28px;
+  margin-left: 30px;
+  flex: 2;
+  max-width: 500px;
+}
+
+img.icon {
+  width: 30px;
+  height: 30px;
+}
+
+/* 新增的样式 */
+.link-with-margin {
+  margin-bottom: 190px; /* 根据需要调整这个值 */
+}
