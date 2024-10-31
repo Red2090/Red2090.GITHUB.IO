@@ -12,8 +12,8 @@ nav.navbar {
   color: white;
   padding: 10px 60px;
   border-bottom: 1px solid #4a4a4a;
-  font-family: 'Microsoft YaHei', sans-serif;
-  font-size: 1.2em;
+  font-family: 'Microsoft YaHei', 'San Francisco';
+  font-size: 1.3em;
   height: 60px;
 }
 
