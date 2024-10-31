@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera AI Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        window.onload = function() {
+            alert("施工中");
+        };
+    </script>
+    <style>
+        .outer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 120px); /* 减去导航栏和页脚的高度 */
+            width: 100%;
+            background-color: #27262b;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .inner-container {
+            background-color: #27262b;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .content-title {
+            color: #c5c5c5;
+        }
+
+        video {
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #666;
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 20px;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            video {
+                width: 100%; /* 确保视频在小屏幕上填满容器 */
+                height: auto; /* 保持视频的长宽比 */
+            }
+        }
+    </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/">Red2090.github.io</a>
+    <a href="./ricksroll.html" target="_blank">🔥</a>
+  </nav>
+  
+  <div class="outer-container">
+    <div class="inner-container">
+      <span class="content-title"><h1>-</h1></span>
+      <video id="video" width="640" height="480" autoplay></video>
+      <button id="captureButton">Capture Image</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-left">
+      <p>"陆品宏"的个人网页</p>
+    </div>
+    <div class="footer-right">
+      <a href="https://steamcommunity.com/profiles/76561199230499717/" target="_blank"><img src="./images/Steam_icon_logo.svg.png" alt="Steam" class="icon"></a>
+      <a href="https://x.com/Red40602025" target="_blank"><img src="./images/new-2023-twitter-logo-x-icon-design_1017-45418.avif" alt="Twitter" class="icon"></a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
