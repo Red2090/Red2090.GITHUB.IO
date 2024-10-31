@@ -12,7 +12,7 @@ nav.navbar {
   color: white;
   padding: 10px 60px;
   border-bottom: 1px solid #4a4a4a;
-  font-family: 'Microsoft YaHei', 'San Francisco';
+  font-family: 'Microsoft YaHei', sans-serif;
   font-size: 1.3em;
   height: 60px;
 }
@@ -130,6 +130,7 @@ img.icon {
   nav.navbar {
     padding: 10px 20px; /* 减小内边距 */
     font-size: 1.3em; /* 减小字体 */
+    font-weight: 500;
   }
 
   nav.navbar a {
