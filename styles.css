@@ -39,11 +39,12 @@ div.content {
   border-radius: 22px;
   height: auto;
   margin-bottom: 20px;
+  margin-top: 130px;
 }
 
 .image-container {
   margin-top: 60px;
-  text-align: center; /* 使图片在容器中居中 */
+  text-align: center;
 }
 
 .image-container img {
@@ -54,12 +55,12 @@ div.content {
 
 .content-title h1 {
   font-size: 2em;
-  font-family: 'MicrosoftYaHei', Courier, monospace;
+  font-family: 'Microsoft YaHei', Courier, monospace;
   line-height: 0.5em;
 }
 
 a {
-  color: white; /* 链接字体颜色为白色 */
+  color: white;
   text-decoration-line: underline;
   font-size: 0.9em;
 }
@@ -120,7 +121,50 @@ img.icon {
   height: 30px;
 }
 
-/* 新增的样式 */
 .link-with-margin {
-  margin-bottom: 190px; /* 根据需要调整这个值 */
+  margin-bottom: 190px;
+}
+
+/* 媒体查询 */
+@media (max-width: 600px) {
+  nav.navbar {
+    padding: 10px 20px; /* 减小内边距 */
+    font-size: 1em; /* 减小字体 */
+  }
+
+  nav.navbar a {
+    margin-left: 20px; /* 增加左侧边距 */
+  }
+
+  div.content {
+    width: 90%; /* 增加宽度以适应小屏幕 */
+    padding: 15px; /* 减小内边距 */
+  }
+
+  .content-title h1 {
+    font-size: 1.5em; /* 减小字体大小 */
+  }
+
+  .content-image {
+    margin-top: 30px;
+  }
+
+  button.rounded-button {
+    font-size: 0.9em; /* 减小字体 */
+    padding: 8px 15px; /* 减小内边距 */
+  }
+
+  img.icon {
+    width: 24px; /* 减小图标大小 */
+    height: 24px;
+  }
+
+  div.footer-left {
+    flex: 2; /* 增加左侧区域宽度 */
+    font-size: 0.8em; /* 减小字体大小 */
+  }
+
+  div.footer-right {
+    flex: 1; /* 保持右侧区域宽度 */
+  }
 }
