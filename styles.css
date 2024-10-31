@@ -12,7 +12,7 @@ nav.navbar {
   color: white;
   padding: 10px 60px;
   border-bottom: 1px solid #4a4a4a;
-  font-family: 'Microsoft YaHei', Courier, monospace;
+  font-family: 'Microsoft YaHei', sans-serif;
   font-size: 1.2em;
   height: 60px;
 }
