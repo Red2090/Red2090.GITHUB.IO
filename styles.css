@@ -129,7 +129,7 @@ img.icon {
 @media (max-width: 600px) {
   nav.navbar {
     padding: 10px 20px; /* 减小内边距 */
-    font-size: 1.2em; /* 减小字体 */
+    font-size: 1.3em; /* 减小字体 */
   }
 
   nav.navbar a {
