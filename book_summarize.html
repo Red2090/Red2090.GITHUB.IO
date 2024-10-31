@@ -66,11 +66,27 @@
             color: white;
         }
 
+        .pc-only {
+          display: block;
+        }
+
+        .mobile-only {
+          display: none;
+        }
+
         @media (max-width: 600px) {
-            video {
-                width: 100%; /* 确保视频在小屏幕上填满容器 */
-                height: auto; /* 保持视频的长宽比 */
-            }
+          video {
+              width: 100%; /* 确保视频在小屏幕上填满容器 */
+              height: auto; /* 保持视频的长宽比 */
+          }
+
+          .pc-only {
+            display: none;
+          }
+
+          .mobile-only {
+            display: block;
+          }
         }
     </style>
 </head>
@@ -80,14 +96,20 @@
     <a href="./ricksroll.html" target="_blank">🔥</a>
   </nav>
   
-  <div class="outer-container">
-    <div class="inner-container">
-      <span class="content-title">此页面还需要增加：修复手机端相机调用bug，AI总结文本，选择多页照片模式，优化ui</span>
-      <video id="video" width="640" height="480" autoplay></video>
-      <button id="captureButton">Capture Image</button>
-      <canvas id="canvas" style="display:none;"></canvas>
-      <div id="result"></div>
+  <div class="pc-only">
+    <div class="outer-container">
+      <div class="inner-container">
+        <span class="content-title">此页面还需要增加：修复手机端相机调用bug，AI总结文本，选择多页照片模式，优化ui</span>
+        <video id="video" width="640" height="480" autoplay></video>
+        <button id="captureButton">Capture Image</button>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <div id="result"></div>
+      </div>
     </div>
+  </div>
+
+  <div class="mobile-only">
+    <input type="file" accept="image/*" capture="camera">
   </div>
 
   <footer class="footer">
