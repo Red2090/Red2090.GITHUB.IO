@@ -131,6 +131,7 @@ img.icon {
     padding: 10px 20px; /* 减小内边距 */
     font-size: 1.3em; /* 减小字体 */
     font-weight: 500;
+    letter-spacing: 0.5px; /* 设置字间距为 2 像素 */
   }
 
   nav.navbar a {
