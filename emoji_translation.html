@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji语句生成器</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        input {
+            padding: 12px;
+            width: 80%;
+            margin-bottom: 17px;
+            border: 1px solid #ccc;
+            border-radius: 18px;
+            font-size: 1em;
+            color: black;
+            background-color: white;
+        }
+        button.rounded-button {
+            background-color: #ff8000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        button.rounded-button:hover {
+            background-color: #ff3300;
+            transform: scale(1.05);
+        }
+        .result {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .copy-button {
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            font-size: 1em;
+            border-radius: 18px;
+            cursor: pointer;
+            display: none; /* 初始隐藏 */
+            margin-top: 10px;
+        }
+        .copy-button:hover {
+            background-color: #666;
+            transform: scale(1.05);
+        }
+        footer.footer {
+            position: relative;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: #27262b;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            border-top: 1px solid #4a4a4a;
+            justify-content: center;
+            font-family: 'Microsoft YaHei', Courier, monospace;
+            letter-spacing: 1.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/">Red2090.github.io</a>
+        <a href="./ricksroll.html" target="_blank">🔥</a>
+    </nav>
+    <div class="content">
+        <h1 class="content-title">Emoji语句生成器</h1>
+        <input type="text" id="inputText" placeholder="输入一段话...">
+        <button class="rounded-button" id="generateButton">生成</button>
+        <div class="result" id="emojiResult"></div>
+        <button class="copy-button" id="copyButton">复制</button> <!-- 复制按钮 -->
+    </div>
+
+    <script>
+        let apiKey;
+
+        // 加载配置文件以获取 API 密钥
+        fetch('config.json')
+            .then(response => response.json())
+            .then(config => {
+                apiKey = config.api_key; // 存储 API 密钥
+            })
+            .catch(error => {
+                console.error('加载配置失败:', error);
+            });
+
+        document.getElementById('generateButton').addEventListener('click', function() {
+            const inputText = document.getElementById('inputText').value;
+            if (!inputText) {
+                document.getElementById('emojiResult').innerText = '😅？';
+                return;
+            }
+
+            // DeepSeek API 的实际 URL
+            const apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}` // 使用加载的 API 密钥
+                },
+                body: JSON.stringify({
+                    messages: [
+                        { role: "system", content: "你是一个文本emoji翻译器，你需要将收到的话翻译成emoji语句，emoji要多，详细，有顺序，逻辑清晰。假设某个人或物有一个特定名称，就在该人或物的emoji后面加双引号，双引号里是该名称。你只能返回emoji，不要返回其他内容。" },
+                        { role: "user", content: inputText } // 用户输入的内容
+                    ],
+                    model: "deepseek-chat" // 使用的模型
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络错误');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const emojiContent = data.choices[0].message.content || '未找到相关 Emoji';
+                document.getElementById('emojiResult').innerText = emojiContent;
+                
+                // 显示复制按钮
+                const copyButton = document.getElementById('copyButton');
+                copyButton.style.display = 'inline'; // 显示按钮
+
+                // 设置复制按钮的点击事件
+                copyButton.onclick = function() {
+                    navigator.clipboard.writeText(emojiContent).then(() => {
+                        alert('复制成功！');
+                    }).catch(err => {
+                        console.error('复制失败:', err);
+                    });
+                };
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('emojiResult').innerText = '请求失败，请重试。';
+            });
+        });
+    </script>
+</body>
+
+</html>
