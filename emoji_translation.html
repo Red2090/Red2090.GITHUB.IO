@@ -114,7 +114,7 @@
                 },
                 body: JSON.stringify({
                     messages: [
-                        { role: "system", content: "你是一个文本emoji翻译器，你需要将收到的话翻译成emoji语句，emoji要多，详细，有顺序，逻辑清晰。假设某个人或物有一个特定名称，就在该人或物的emoji后面加双引号，双引号里是该名称。你只能返回emoji，不要返回其他内容。" },
+                        { role: "system", content: "你是一个文本emoji翻译器，你需要将收到的话翻译成emoji语句，emoji要多，详细，有顺序，逻辑清晰。假设某个人或物有一个特定名称，就在该人或物的emoji后面加双引号，双引号里是该名称。你只能返回emoji，不要返回其他内容。最后根据语气在句子结尾加上文本标点符号。" },
                         { role: "user", content: inputText } // 用户输入的内容
                     ],
                     model: "deepseek-chat" // 使用的模型
