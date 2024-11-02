@@ -22,6 +22,12 @@ nav.navbar a {
   text-decoration: none;
 }
 
+nav.navbar .right-links {
+  margin-left: auto; 
+  display: flex; /* 使用flex布局 */
+  gap: 25px; /* 设置间隔 */
+}
+
 div.content {
   margin: 20px auto 100px;
   padding: 20px;
@@ -134,8 +140,14 @@ img.icon {
     letter-spacing: 0.5px; /* 设置字间距为 2 像素 */
   }
 
-  nav.navbar a {
+  nav.navbar .left-links {
     margin-left: 20px; /* 增加左侧边距 */
+  }
+
+  nav.navbar .right-links {
+    margin-left: auto; /* 将中间链接推到右侧 */
+    display: flex; /* 使用flex布局 */
+    gap: 20px; /* 设置间隔 */
   }
 
   div.content {
