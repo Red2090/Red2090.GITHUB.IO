@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI summarize book</title>
+    <title>AI Summarize Book</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        window.onload = function() {
-            alert("施工中...");
-        };
-    </script>
     <style>
+        /* CSS 样式保持不变，除了添加新样式来显示图片和按钮 */
         .outer-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 120px); /* 减去导航栏和页脚的高度 */
+            height: calc(100vh - 120px);
             width: 100%;
             background-color: #27262b;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         .inner-container {
             background-color: #27262b;
             padding: 20px;
@@ -32,17 +27,12 @@
             max-width: 600px;
             width: 90%;
         }
-
-        .content-title {
-            color: #c5c5c5;
-        }
-
-        video {
+        img {
             display: block;
-            margin: 0 auto 20px;
+            margin: 20px auto;
             border-radius: 15px;
+            max-width: 100%;
         }
-
         button {
             width: 100%;
             padding: 10px;
@@ -55,38 +45,13 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
             margin-bottom: 20px;
         }
-
         button:hover {
             background-color: #666;
             transform: scale(1.05);
         }
-
         #result {
             margin-top: 20px;
             color: white;
-        }
-
-        .pc-only {
-          display: block;
-        }
-
-        .mobile-only {
-          display: none;
-        }
-
-        @media (max-width: 600px) {
-          video {
-              width: 100%; /* 确保视频在小屏幕上填满容器 */
-              height: auto; /* 保持视频的长宽比 */
-          }
-
-          .pc-only {
-            display: none;
-          }
-
-          .mobile-only {
-            display: block;
-          }
         }
     </style>
 </head>
@@ -101,143 +66,121 @@
         </div>
     </nav>
   
-  <div class="pc-only">
     <div class="outer-container">
-      <div class="inner-container">
-        <span class="content-title">此页面还需要增加：修复手机端相机调用bug，AI总结文本，选择多页照片模式，优化ui</span>
-        <video id="video" width="640" height="480" autoplay></video>
-        <button id="captureButton">Capture Image</button>
-        <canvas id="canvas" style="display:none;"></canvas>
-        <div id="result"></div>
-      </div>
+        <div class="inner-container">
+            <span class="content-title">请拍摄或选择照片</span>
+            <img id="imagePreview" style="display:none;">
+            <button id="confirmButton" style="display:none;">确定</button>
+            <div id="result"></div>
+        </div>
     </div>
-  </div>
 
-  <div class="mobile-only">
-    <input type="file" accept="image/*" capture="camera">
-  </div>
+    <footer class="footer">
+        <div class="footer-left">
+            <p>"陆品宏"的个人网页</p>
+        </div>
+        <div class="footer-right">
+            <a href="https://steamcommunity.com/profiles/76561199230499717/" target="_blank"><img src="./images/Steam_icon_logo.svg.png" alt="Steam" class="icon"></a>
+            <a href="https://x.com/Red40602025" target="_blank"><img src="./images/new-2023-twitter-logo-x-icon-design_1017-45418.avif" alt="Twitter" class="icon"></a>
+        </div>
+    </footer>
 
-  <footer class="footer">
-    <div class="footer-left">
-      <p>"陆品宏"的个人网页</p>
-    </div>
-    <div class="footer-right">
-      <a href="https://steamcommunity.com/profiles/76561199230499717/" target="_blank"><img src="./images/Steam_icon_logo.svg.png" alt="Steam" class="icon"></a>
-      <a href="https://x.com/Red40602025" target="_blank"><img src="./images/new-2023-twitter-logo-x-icon-design_1017-45418.avif" alt="Twitter" class="icon"></a>
-    </div>
-  </footer>
+    <script>
+        window.onload = async function() {
+            // 请求访问相机
+            await navigator.mediaDevices.getUserMedia({ video: true });
+            // 提示用户拍摄或选择照片
+            alert("请拍摄或选择照片");
+            
+            // 处理文件输入
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.capture = 'camera';
+            document.body.appendChild(fileInput);
 
-  <script>
-    const video = document.getElementById('video');
-const captureButton = document.getElementById('captureButton');
-const canvas = document.getElementById('canvas');
-const result = document.getElementById('result');
+            fileInput.addEventListener('change', async function(event) {
+                const file = event.target.files[0];
+                const preview = document.getElementById('imagePreview');
+                const confirmButton = document.getElementById('confirmButton');
 
-// 检测设备类型
-const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        confirmButton.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
-if (isMobile) {
-    // 移动端逻辑
-    const fileInput = document.getElementById('fileInput');
-    fileInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const preview = document.getElementById('imagePreview');
+            // 确定按钮点击事件
+            document.getElementById('confirmButton').addEventListener('click', async function() {
+                const imageData = document.getElementById('imagePreview').src.split(',')[1];
+                const ocrResult = await sendImageToApi(imageData);
+                const summary = await summarizeText(ocrResult);
+                document.getElementById('result').innerText = '总结: ' + summary;
+            });
+        };
 
-        if (file) {
-            const reader = new FileReader();
+        async function sendImageToApi(imageData) {
+            const configUrl = 'config.json';
+            let config = null;
 
-            reader.onload = async function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                
-                // 发送图片数据到百度 OCR API
-                const imageData = e.target.result.split(',')[1];
-                const resultText = await sendImageToApi(imageData);
-                result.innerText = 'Result: ' + resultText;
-            };
+            try {
+                const response = await fetch(configUrl);
+                config = await response.json();
+            } catch (error) {
+                console.error('Error loading config:', error);
+                throw new Error('Failed to load configuration.');
+            }
 
-            reader.readAsDataURL(file);
-        }
-    });
-} else {
-    // 电脑端逻辑
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(error => {
-            console.error('Error accessing camera:', error);
-        });
+            const requestUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/webimage";
+            const accessToken = config.access_token;
+            const requestUrlWithToken = `${requestUrl}?access_token=${accessToken}`;
 
-    captureButton.addEventListener('click', async () => {
-        try {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            const params = { image: imageData };
+            const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
-            // 将 canvas 转换为 Base64 编码的图片数据
-            const imageData = canvas.toDataURL('image/jpeg').split(',')[1];
+            try {
+                const response = await fetch(requestUrlWithToken, {
+                    method: 'POST',
+                    headers: headers,
+                    body: new URLSearchParams(params)
+                });
 
-            // 发送 Base64 编码的图片数据到百度 OCR API
-            const resultText = await sendImageToApi(imageData);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-            // 显示结果
-            result.innerText = 'Result: ' + resultText;
-        } catch (error) {
-            console.error('Error capturing or processing image:', error);
-            result.innerText = 'An error occurred.';
-        }
-    });
-}
-
-// 发送图片数据到百度 OCR API
-async function sendImageToApi(imageData) {
-    const configUrl = 'config.json';
-    let config = null;
-
-    // 加载配置文件
-    try {
-        const response = await fetch(configUrl);
-        config = await response.json();
-    } catch (error) {
-        console.error('Error loading config:', error);
-        throw new Error('Failed to load configuration.');
-    }
-
-    const requestUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/webimage";
-    const accessToken = config.access_token;
-    const requestUrlWithToken = `${requestUrl}?access_token=${accessToken}`;
-
-    const params = {
-        image: imageData
-    };
-
-    const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    };
-
-    try {
-        const response = await fetch(requestUrlWithToken, {
-            method: 'POST',
-            headers: headers,
-            body: new URLSearchParams(params)
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                if (data.words_result && Array.isArray(data.words_result)) {
+                    return data.words_result.map(item => item.words).join('\n');
+                } else {
+                    return '未检测到文字';
+                }
+            } catch (error) {
+                console.error('Error sending image to API:', error);
+                throw new Error('出现错误。');
+            }
         }
 
-        const data = await response.json();
-        if (data.words_result && Array.isArray(data.words_result)) {
-            return data.words_result.map(item => item.words).join('\n');
-        } else {
-            return 'No words detected';
+        async function summarizeText(text) {
+            // 这里需要你实现对接 DeepSeek API 的逻辑
+            // 示例伪代码：
+            const requestUrl = "DEEP_SEEK_API_URL"; // 替换为实际的 API URL
+            const response = await fetch(requestUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text })
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+
+            return data.summary; // 假设返回的 JSON 中有 summary 字段
         }
-    } catch (error) {
-        console.error('Error sending image to API:', error);
-        throw new Error('An error occurred.');
-    }
-}
-  </script>
+    </script>
 </body>
 </html>
