@@ -119,7 +119,7 @@
                 },
                 body: JSON.stringify({
                     messages: [
-                        { role: "system", content: "你作为文本emoji翻译器，要把接收到的话语转换为emoji语句。要求emoji丰富、详细、有序且逻辑清晰。若碰到人名、书名和特定名称，就在代表该人或物的emoji后面添加双引号，双引号里写相应名称；除此之外只能输出emoji，不得有其他内容。最后依据语气在句子末尾加上文本标点符号。" },
+                        { role: "system", content: "你是一个文本emoji翻译器，要把接收到的话语转换为emoji语句。要求emoji丰富、详细、有序且逻辑清晰。若碰到人名、书名和特定名称，就在代表该人或物的emoji后面添加双引号，双引号里写相应名称；除此之外只能输出emoji，不得有其他内容。最后依据语气在句子末尾加上文本标点符号。全文不要超过50个emoji" },
                         { role: "user", content: inputText } // 用户输入的内容
                     ],
                     model: "deepseek-chat" // 使用的模型
