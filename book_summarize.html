@@ -6,7 +6,6 @@
     <title>AI Summarize Book</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* CSS 样式保持不变，除了添加新样式来显示图片和按钮 */
         .outer-container {
             display: flex;
             justify-content: center;
@@ -17,7 +16,7 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex-direction: column; /* 垂直方向布局 */
+            flex-direction: column;
         }
         .inner-container {
             background-color: #27262b;
@@ -44,7 +43,7 @@
             font-size: 1em;
             border-radius: 25px;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            margin-top: 20px; /* 顶部间距 */
+            margin-top: 20px;
         }
         button:hover {
             background-color: #666;
@@ -59,100 +58,51 @@
 <body>
     <nav class="navbar">
         <div class="left-links">
-          <a>Red2090.github.io</a>
+            <a>Red2090.github.io</a>
         </div>
         <div class="right-links">
-          <a href="/" target="_blank">🏠</a>
-          <a href="./ricksroll.html" target="_blank">🔥</a>
+            <a href="/" target="_blank">🏠</a>
+            <a href="./ricksroll.html" target="_blank">🔥</a>
         </div>
     </nav>
   
     <div class="outer-container">
         <div class="inner-container">
             <span class="content-title">请拍摄或选择照片</span>
+            <input type="file" id="fileInput" accept="image/*" capture="camera" style="display:none;">
             <img id="imagePreview" style="display:none;">
-            <button id="confirmButton" style="display:none;">确定</button>
+            <button id="confirmButton" style="display:none;">确认</button>
             <div id="result"></div>
         </div>
     </div>
 
     <script>
-        window.onload = async function() {
-            alert("施工中...");
-            // 请求访问相机
-            await navigator.mediaDevices.getUserMedia({ video: true });
+        window.onload = function() {
+            document.getElementById('fileInput').click(); // Automatically open the camera input
             
-            // 处理文件输入
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*';
-            fileInput.capture = 'camera';
-            document.body.appendChild(fileInput);
+            const fileInput = document.getElementById('fileInput');
+            const preview = document.getElementById('imagePreview');
+            const confirmButton = document.getElementById('confirmButton');
+            const resultContainer = document.getElementById('result');
 
-            fileInput.addEventListener('change', async function(event) {
+            fileInput.addEventListener('change', function(event) {
                 const file = event.target.files[0];
-                const preview = document.getElementById('imagePreview');
-                const confirmButton = document.getElementById('confirmButton');
-
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = async function(e) {
+                    reader.onload = function(e) {
                         preview.src = e.target.result;
                         preview.style.display = 'block';
                         confirmButton.style.display = 'block';
-                        // 确保图片在屏幕正中间
-                        preview.style.margin = 'auto';
                     };
                     reader.readAsDataURL(file);
                 }
             });
 
-            // 确定按钮点击事件
-            document.getElementById('confirmButton').addEventListener('click', async function() {
+            confirmButton.addEventListener('click', function() {
+                resultContainer.innerHTML = "<p>照片已确认!</p>";
+                // Here you can add further processing of the image if needed
             });
         };
-
-
-        
     </script>
 </body>
 </html>
-<!--         async function sendImageToApi(imageData) {
-            const configUrl = 'config.json';
-            let config = null;
-
-            try {
-                const response = await fetch(configUrl);
-                config = await response.json();
-            } catch (error) {
-                console.error('Error loading config:', error);
-                throw new Error('Failed to load configuration.');
-            }
-
-            const requestUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/webimage";
-            const accessToken = config.access_token;
-            const requestUrlWithToken = `${requestUrl}?access_token=${accessToken}`;
-
-            const params = { image: imageData };
-            const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-
-            try {
-                const response = await fetch(requestUrlWithToken, {
-                    method: 'POST',
-                    headers: headers,
-                    body: new URLSearchParams(params)
-                });
-
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-                const data = await response.json();
-                if (data.words_result && Array.isArray(data.words_result)) {
-                    return data.words_result.map(item => item.words).join('\n');
-                } else {
-                    return '未检测到文字';
-                }
-            } catch (error) {
-                console.error('Error sending image to API:', error);
-                throw new Error('出现错误。');
-            }
-        } -->
