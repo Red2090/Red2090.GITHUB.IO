@@ -26,6 +26,7 @@ nav.navbar .right-links {
   margin-left: auto; 
   display: flex; /* 使用flex布局 */
   gap: 25px; /* 设置间隔 */
+  gap: 25px; /* 设置间隔 */
 }
 
 
