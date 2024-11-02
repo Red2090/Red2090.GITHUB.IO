@@ -17,6 +17,7 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-direction: column; /* 垂直方向布局 */
         }
         .inner-container {
             background-color: #27262b;
@@ -43,7 +44,7 @@
             font-size: 1em;
             border-radius: 25px;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            margin-bottom: 20px;
+            margin-top: 20px; /* 顶部间距 */
         }
         button:hover {
             background-color: #666;
@@ -75,23 +76,11 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="footer-left">
-            <p>"陆品宏"的个人网页</p>
-        </div>
-        <div class="footer-right">
-            <a href="https://steamcommunity.com/profiles/76561199230499717/" target="_blank"><img src="./images/Steam_icon_logo.svg.png" alt="Steam" class="icon"></a>
-            <a href="https://x.com/Red40602025" target="_blank"><img src="./images/new-2023-twitter-logo-x-icon-design_1017-45418.avif" alt="Twitter" class="icon"></a>
-        </div>
-    </footer>
-
     <script>
         window.onload = async function() {
             alert("施工中...");
             // 请求访问相机
             await navigator.mediaDevices.getUserMedia({ video: true });
-            // 提示用户拍摄或选择照片
-            alert("请拍摄或选择照片");
             
             // 处理文件输入
             const fileInput = document.createElement('input');
@@ -111,6 +100,8 @@
                         preview.src = e.target.result;
                         preview.style.display = 'block';
                         confirmButton.style.display = 'block';
+                        // 确保图片在屏幕正中间
+                        preview.style.margin = 'auto';
                     };
                     reader.readAsDataURL(file);
                 }
@@ -118,14 +109,15 @@
 
             // 确定按钮点击事件
             document.getElementById('confirmButton').addEventListener('click', async function() {
-                const imageData = document.getElementById('imagePreview').src.split(',')[1];
-                const ocrResult = await sendImageToApi(imageData);
-                const summary = await summarizeText(ocrResult);
-                document.getElementById('result').innerText = '总结: ' + summary;
             });
         };
 
-        async function sendImageToApi(imageData) {
+
+        
+    </script>
+</body>
+</html>
+<!--         async function sendImageToApi(imageData) {
             const configUrl = 'config.json';
             let config = null;
 
@@ -163,25 +155,4 @@
                 console.error('Error sending image to API:', error);
                 throw new Error('出现错误。');
             }
-        }
-
-        async function summarizeText(text) {
-            // 这里需要你实现对接 DeepSeek API 的逻辑
-            // 示例伪代码：
-            const requestUrl = "DEEP_SEEK_API_URL"; // 替换为实际的 API URL
-            const response = await fetch(requestUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ text })
-            });
-
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-            const data = await response.json();
-
-            return data.summary; // 假设返回的 JSON 中有 summary 字段
-        }
-    </script>
-</body>
-</html>
+        } -->
