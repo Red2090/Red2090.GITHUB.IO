@@ -14,10 +14,9 @@
         }
         .ocr-result {
             margin-top: 10px;
-            border: 2px solid #ccc;
+            border: 2px solid #e8e8e8;
             border-radius: 18px;
             padding: 10px;
-            background-color: rgb(170, 170, 170);
         }
         #photo {
             display: none;
@@ -41,7 +40,7 @@
     </nav>
     <div class="content">
         <input type="file" accept="image/*" id="cameraInput" capture="camera" style="display: none;" />
-        <button class="rounded-button" id="takePhotoButton" style="font-size: 20px; padding: 10px 20px;">拍照</button>
+        <button class="rounded-button" id="takePhotoButton" style="font-size: 20px; padding: 10px 20px;">上传文件</button>
         <img id="photo" src="" />
         <button class="rounded-button centered-button" id="confirmButton" style="display: none;">确定</button>
         <div id="ocrResult" class="ocr-result"></div>
