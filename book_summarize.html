@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>1</title>
+    <title>BookReading</title>
 </head>
 <body>
     <nav class="navbar">
@@ -15,12 +15,13 @@
           <a href="/" target="_blank">🏠</a>
           <a href="./ricksroll.html" target="_blank">🔥</a>
         </div>
-      </nav>
+    </nav>
     <div class="content">
-    <input type="file" accept="image/*" id="cameraInput" capture="camera" style="display: none;" />
-    <button class="rounded-button" id="takePhotoButton">拍照</button>
-    <img id="photo" src="" alt="用户拍摄的照片" style="display: none; width: 100%; max-width: 300px;" />
-    <button class="rounded-button" id="takePhotoButton"style="display: none;">确定</button>
+        <input type="file" accept="image/*" id="cameraInput" capture="camera" style="display: none;" />
+        <button class="rounded-button" id="takePhotoButton">拍照</button>
+        <img id="photo" src="" alt="用户拍摄的照片" style="display: none; width: 100%; max-width: 300px;" />
+        <button class="rounded-button" id="confirmButton" style="display: none;">确定</button>
+        <div id="ocrResult" style="margin-top: 10px;"></div>
     </div>
 
     <script>
@@ -28,6 +29,7 @@
         const takePhotoButton = document.getElementById('takePhotoButton');
         const photo = document.getElementById('photo');
         const confirmButton = document.getElementById('confirmButton');
+        const ocrResult = document.getElementById('ocrResult');
 
         takePhotoButton.addEventListener('click', () => {
             cameraInput.click();
@@ -41,15 +43,56 @@
                     photo.src = e.target.result;
                     photo.style.display = 'block';
                     confirmButton.style.display = 'block';
+                    ocrResult.innerHTML = '';  // 清除之前的结果
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        confirmButton.addEventListener('click', () => {
-            alert('照片已确认！');
-            // 这里可以添加进一步处理照片的代码
+        confirmButton.addEventListener('click', async () => {
+            const result = await sendImageToApi(photo.src.split(',')[1]); // 只取 Base64 部分
+            ocrResult.innerText = result;
         });
+
+        async function sendImageToApi(imageData) {
+            const configUrl = 'config.json';
+            let config = null;
+
+            try {
+                const response = await fetch(configUrl);
+                config = await response.json();
+            } catch (error) {
+                console.error('Error loading config:', error);
+                throw new Error('Failed to load configuration.');
+            }
+
+            const requestUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/webimage";
+            const accessToken = config.access_token;
+            const requestUrlWithToken = `${requestUrl}?access_token=${accessToken}`;
+
+            const params = { image: imageData };
+            const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+
+            try {
+                const response = await fetch(requestUrlWithToken, {
+                    method: 'POST',
+                    headers: headers,
+                    body: new URLSearchParams(params)
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+                if (data.words_result && Array.isArray(data.words_result)) {
+                    return data.words_result.map(item => item.words).join('\n');
+                } else {
+                    return '未检测到文字';
+                }
+            } catch (error) {
+                console.error('Error sending image to API:', error);
+                throw new Error('出现错误。');
+            }
+        }
     </script>
 </body>
 </html>
