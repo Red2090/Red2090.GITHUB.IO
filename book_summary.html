@@ -34,7 +34,6 @@
             margin: 0 auto; /* Center the image */
             display: block; /* Make it a block element for centering */
         }
-
     </style>
 </head>
 <body>
@@ -63,7 +62,12 @@
         const confirmButton = document.getElementById('confirmButton');
 
         takePhotoButton.addEventListener('click', () => {
-            cameraInput.click();
+            // 检测是否为移动设备
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                alert('手机端暂不可用');
+            } else {
+                cameraInput.click();
+            }
         });
 
         cameraInput.addEventListener('change', (event) => {
@@ -80,6 +84,7 @@
         });
 
         confirmButton.addEventListener('click', async () => {
+            const ocrResult = document.getElementById('ocrResult');
             ocrResult.innerText = '稍等片刻......'; // 显示等待信息
             const ocrText = await sendImageToApi(photo.src.split(',')[1]); // Only take Base64 part
             if (ocrText) {
