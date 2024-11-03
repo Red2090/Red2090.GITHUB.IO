@@ -23,7 +23,6 @@
         <button class="rounded-button" id="confirmButton" style="display: none; margin-top: 10px;">确定</button>
         <div id="ocrResult" style="margin-top: 10px;"></div>
         <div id="apiStatus" style="margin-top: 10px; font-weight: bold;"></div>
-        <div id="base64Output" style="margin-top: 10px; white-space: pre-wrap;"></div> <!-- 新增的用于显示 Base64 编码的 div -->
     </div>
 
     <script>
@@ -33,7 +32,6 @@
         const confirmButton = document.getElementById('confirmButton');
         const ocrResult = document.getElementById('ocrResult');
         const apiStatus = document.getElementById('apiStatus');
-        const base64Output = document.getElementById('base64Output'); // 获取 Base64 输出的 div
 
         takePhotoButton.addEventListener('click', () => {
             cameraInput.click();
@@ -55,8 +53,6 @@
                     photo.style.display = 'block';
                     confirmButton.style.display = 'block';
                     ocrResult.innerHTML = '';  // 清除之前的结果
-                    apiStatus.innerHTML = '';   // 清除之前的 API 状态
-                    base64Output.innerText = e.target.result; // 显示 Base64 编码
                 };
                 reader.readAsDataURL(file);
             }
@@ -65,7 +61,7 @@
         confirmButton.addEventListener('click', async () => {
             apiStatus.innerHTML = '正在连接到百度 API...'; // 显示连接状态
             const result = await sendImageToApi(photo.src.split(',')[1]); // 只取 Base64 部分
-            ocrResult.innerText = result;
+            ocrResult.innerText = result; // 只显示处理后的结果
         });
 
         async function sendImageToApi(imageData) {
@@ -94,25 +90,16 @@
                     body: new URLSearchParams(params)
                 });
 
-                // 显示原始返回值
-                const rawResponse = await response.text(); // 获取原始文本响应
-                apiStatus.innerHTML += `<br>原始返回值: ${rawResponse}`; // 显示原始返回值
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status} - ${rawResponse}`);
-
-                const data = JSON.parse(rawResponse); // 解析 JSON
+                const data = await response.json(); // 直接解析 JSON
                 if (data.words_result && Array.isArray(data.words_result)) {
-                    if (data.words_result.length > 0) {
-                        return data.words_result.map(item => item.words).join('\n');
-                    } else {
-                        return '未检测到文字';
-                    }
+                    return data.words_result.map(item => item.words).join('\n');
                 } else {
                     return '未检测到文字';
                 }
             } catch (error) {
                 console.error('Error sending image to API:', error);
-                apiStatus.innerHTML += `<br>错误信息: ${error.message}`; // 显示错误信息
                 throw new Error('出现错误。');
             }
         }
