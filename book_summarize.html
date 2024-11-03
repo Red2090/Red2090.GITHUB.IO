@@ -23,6 +23,7 @@
             text-align: left;
             font-size: large;
             font-weight: normal;
+            font-family: 'Microsoft YaHei', sans-serif;
         }
 
         #photo {
@@ -33,6 +34,7 @@
             margin: 0 auto; /* Center the image */
             display: block; /* Make it a block element for centering */
         }
+
     </style>
 </head>
 <body>
@@ -78,18 +80,11 @@
         });
 
         confirmButton.addEventListener('click', async () => {
-            const ocrResult = document.getElementById('ocrResult');
-            ocrResult.innerHTML = '稍等片刻......'; // 显示等待信息
+            ocrResult.innerText = '稍等片刻......'; // 显示等待信息
             const ocrText = await sendImageToApi(photo.src.split(',')[1]); // Only take Base64 part
-
             if (ocrText) {
-                // 显示百度API识别完成的提示
-                ocrResult.innerHTML += '<br>文字识别完成，正在总结'; // 追加提示信息
                 const deepSeekResult = await sendTextToApi(ocrText);
-                
-                // 显示 DeepSeek 处理完成的提示
-                ocrResult.innerHTML += '<br>总结完成'; // 追加提示信息
-                ocrResult.innerHTML += '<br>' + deepSeekResult; // 显示结果
+                document.getElementById('ocrResult').innerText = deepSeekResult; // 显示结果到新的区域
             }
         });
 
@@ -145,6 +140,7 @@
                 throw new Error('Failed to load configuration.');
             }
 
+            // 使用 Bearer Token 进行身份验证
             try {
                 const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
                     method: 'POST',
