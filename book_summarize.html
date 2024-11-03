@@ -17,7 +17,15 @@
             border: 2px solid #e8e8e8;
             border-radius: 18px;
             padding: 10px;
+            padding-left: 20px; /* 设置文字区域与框本身的左间距 */
+            padding-right: 20px; /* 设置文字区域与框本身的右间距 */
+            line-height: 1.7; /* 设置文字的行间距 */
+            text-align: left;
+            font-family: monospace;
+            font-size: large;
+            font-weight: 1;
         }
+
         #photo {
             display: none;
             width: 100%; /* Set image width to 100% */
@@ -26,6 +34,7 @@
             margin: 0 auto; /* Center the image */
             display: block; /* Make it a block element for centering */
         }
+
     </style>
 </head>
 <body>
@@ -43,8 +52,8 @@
         <button class="rounded-button" id="takePhotoButton" style="font-size: 20px; padding: 10px 20px;">上传文件</button>
         <img id="photo" src="" />
         <button class="rounded-button centered-button" id="confirmButton" style="display: none;">确定</button>
-        <div id="ocrResult" class="ocr-result"></div>
         <div id="apiStatus" style="margin-top: 10px; font-weight: bold;"></div>
+        <div id="ocrResult" class="ocr-result" style="margin-top: 10px; font-weight: bold;"></div>
     </div>
 
     <script>
@@ -52,7 +61,6 @@
         const takePhotoButton = document.getElementById('takePhotoButton');
         const photo = document.getElementById('photo');
         const confirmButton = document.getElementById('confirmButton');
-        const ocrResult = document.getElementById('ocrResult');
 
         takePhotoButton.addEventListener('click', () => {
             cameraInput.click();
@@ -66,15 +74,18 @@
                     photo.src = e.target.result;
                     photo.style.display = 'block'; // Show the image
                     confirmButton.style.display = 'block';
-                    ocrResult.innerHTML = '';  // Clear previous results
                 };
                 reader.readAsDataURL(file);
             }
         });
 
         confirmButton.addEventListener('click', async () => {
-            const result = await sendImageToApi(photo.src.split(',')[1]); // Only take Base64 part
-            ocrResult.innerText = result; // Only display processed result
+            ocrResult.innerText = '稍等片刻......'; // 显示等待信息
+            const ocrText = await sendImageToApi(photo.src.split(',')[1]); // Only take Base64 part
+            if (ocrText) {
+                const deepSeekResult = await sendTextToApi(ocrText);
+                document.getElementById('ocrResult').innerText = deepSeekResult; // 显示结果到新的区域
+            }
         });
 
         async function sendImageToApi(imageData) {
@@ -114,6 +125,43 @@
             } catch (error) {
                 console.error('Error sending image to API:', error);
                 throw new Error('出现错误。');
+            }
+        }
+
+        async function sendTextToApi(text) {
+            const configUrl = 'config.json';
+            let config = null;
+
+            try {
+                const response = await fetch(configUrl);
+                config = await response.json();
+            } catch (error) {
+                console.error('Error loading config:', error);
+                throw new Error('Failed to load configuration.');
+            }
+
+            // 使用 Bearer Token 进行身份验证
+            try {
+                const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${config.api_key}`
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: "system", content: "你是一个课本内容总结助手，你可以把课本上的文字提取关键词和重点，并总结成简单的，容易记忆的要点。" },
+                            { role: "user", content: text }
+                        ],
+                        model: "deepseek-chat",
+                    })
+                });
+
+                const completion = await response.json();
+                return completion.choices[0].message.content;
+            } catch (error) {
+                console.error('Error sending text to DeepSeek API:', error);
+                throw new Error('发送文本到 DeepSeek API 时出现错误。');
             }
         }
     </script>
