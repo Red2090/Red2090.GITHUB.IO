@@ -58,7 +58,6 @@
             const configUrl = 'config.json';
             let config = null;
 
-            // 加载配置文件以获取 access_token
             try {
                 const response = await fetch(configUrl);
                 config = await response.json();
@@ -71,18 +70,14 @@
             const accessToken = config.access_token;
             const requestUrlWithToken = `${requestUrl}?access_token=${accessToken}`;
 
-            const params = new URLSearchParams();
-            params.append('image', imageData); // 直接使用 Base64 字符串
-
-            const headers = {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            };
+            const params = { image: imageData };
+            const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
             try {
                 const response = await fetch(requestUrlWithToken, {
                     method: 'POST',
                     headers: headers,
-                    body: params.toString()
+                    body: new URLSearchParams(params)
                 });
 
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
