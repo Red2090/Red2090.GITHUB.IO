@@ -23,6 +23,7 @@
         <button class="rounded-button" id="confirmButton" style="display: none; margin-top: 10px;">确定</button>
         <div id="ocrResult" style="margin-top: 10px;"></div>
         <div id="apiStatus" style="margin-top: 10px; font-weight: bold;"></div>
+        <div id="base64Output" style="margin-top: 10px; white-space: pre-wrap;"></div> <!-- 新增的用于显示 Base64 编码的 div -->
     </div>
 
     <script>
@@ -32,6 +33,7 @@
         const confirmButton = document.getElementById('confirmButton');
         const ocrResult = document.getElementById('ocrResult');
         const apiStatus = document.getElementById('apiStatus');
+        const base64Output = document.getElementById('base64Output'); // 获取 Base64 输出的 div
 
         takePhotoButton.addEventListener('click', () => {
             cameraInput.click();
@@ -54,6 +56,7 @@
                     confirmButton.style.display = 'block';
                     ocrResult.innerHTML = '';  // 清除之前的结果
                     apiStatus.innerHTML = '';   // 清除之前的 API 状态
+                    base64Output.innerText = e.target.result; // 显示 Base64 编码
                 };
                 reader.readAsDataURL(file);
             }
