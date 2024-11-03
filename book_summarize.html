@@ -40,6 +40,13 @@
         cameraInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
+                // 检查文件类型
+                const validTypes = ['image/jpeg', 'image/png', 'image/bmp'];
+                if (!validTypes.includes(file.type)) {
+                    alert('只支持 JPEG、PNG 或 BMP 格式的图片。');
+                    return; // 停止处理无效文件
+                }
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     photo.src = e.target.result;
