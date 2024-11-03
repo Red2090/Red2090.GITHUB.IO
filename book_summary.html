@@ -61,13 +61,16 @@
         const photo = document.getElementById('photo');
         const confirmButton = document.getElementById('confirmButton');
 
-        takePhotoButton.addEventListener('click', () => {
+        // 页面加载时检测设备
+        document.addEventListener('DOMContentLoaded', () => {
             // 检测是否为移动设备
             if (/Mobi|Android/i.test(navigator.userAgent)) {
                 alert('手机端暂不可用');
-            } else {
-                cameraInput.click();
             }
+        });
+
+        takePhotoButton.addEventListener('click', () => {
+            cameraInput.click();
         });
 
         cameraInput.addEventListener('change', (event) => {
