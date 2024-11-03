@@ -95,16 +95,21 @@
                 const rawResponse = await response.text(); // 获取原始文本响应
                 apiStatus.innerHTML += `<br>原始返回值: ${rawResponse}`; // 显示原始返回值
 
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status} - ${rawResponse}`);
 
                 const data = JSON.parse(rawResponse); // 解析 JSON
                 if (data.words_result && Array.isArray(data.words_result)) {
-                    return data.words_result.map(item => item.words).join('\n');
+                    if (data.words_result.length > 0) {
+                        return data.words_result.map(item => item.words).join('\n');
+                    } else {
+                        return '未检测到文字';
+                    }
                 } else {
                     return '未检测到文字';
                 }
             } catch (error) {
                 console.error('Error sending image to API:', error);
+                apiStatus.innerHTML += `<br>错误信息: ${error.message}`; // 显示错误信息
                 throw new Error('出现错误。');
             }
         }
